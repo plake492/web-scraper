@@ -21,6 +21,19 @@ axios
     $("div.css-1l4spti").each(function(i, element) {
       const title = $(element)
         .children()
+        .children("h2")
+        .text();
+
+      const image = $(element)
+        .children()
+        .children()
+        .children("figure")
+        .children()
+        .children("img")
+        .attr("src");
+
+      const description = $(element)
+        .children()
         .children()
         .text();
 
@@ -29,8 +42,10 @@ axios
         .attr("href");
 
       results.push({
-        link,
-        title
+        title,
+        image,
+        description,
+        link
       });
     });
     console.log(results);
@@ -47,6 +62,12 @@ app.engine(
   })
 );
 app.set("view engine", "handlebars");
+
+app.get("/", function(req, res) {
+  res.render("index", {
+    list: "HELLO"
+  });
+});
 
 // // Hook mongojs configuration to the db constiable
 // const db = mongojs(databaseUrl, collections);
