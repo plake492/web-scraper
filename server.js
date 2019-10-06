@@ -2,8 +2,6 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 // const mongojs = require("mongojs");
-const axios = require("axios");
-const cheerio = require("cheerio");
 
 // Initialize Express
 const app = express();
@@ -11,45 +9,6 @@ const app = express();
 // Database configuration
 const databaseUrl = "web-scraper-news";
 const collections = ["newsPosts"];
-
-axios
-  .get("https://www.nytimes.com/section/technology")
-  .then(function(responce) {
-    const $ = cheerio.load(responce.data);
-    const results = [];
-
-    $("div.css-1l4spti").each(function(i, element) {
-      const title = $(element)
-        .children()
-        .children("h2")
-        .text();
-
-      const image = $(element)
-        .children()
-        .children()
-        .children("figure")
-        .children()
-        .children("img")
-        .attr("src");
-
-      const description = $(element)
-        .children()
-        .children()
-        .text();
-
-      const link = $(element)
-        .children()
-        .attr("href");
-
-      results.push({
-        title,
-        image,
-        description,
-        link
-      });
-    });
-    console.log(results);
-  });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -63,11 +22,11 @@ app.engine(
 );
 app.set("view engine", "handlebars");
 
-app.get("/", function(req, res) {
-  res.render("index", {
-    list: "HELLO"
-  });
-});
+// app.get("/", function(req, res) {
+//   res.render("index", {
+//     list: results
+//   });
+// });
 
 // // Hook mongojs configuration to the db constiable
 // const db = mongojs(databaseUrl, collections);
@@ -86,9 +45,8 @@ app.get("/", function(req, res) {
 //   });
 // });
 // require("./routes/hbs-routes.js")(app);
-// require("./routes/api-routes.js")(app);
+require("./routes/hbs-routes")(app);
 
-// Listen on port 3000
 app.listen(3000, function() {
   console.log("App running on port 3000!");
 });
