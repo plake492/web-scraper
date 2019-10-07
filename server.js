@@ -1,4 +1,3 @@
-// Dependencies
 const express = require("express");
 const exphbs = require("express-handlebars");
 const mongojs = require("mongojs");
@@ -25,7 +24,7 @@ app.engine(
 app.set("view engine", "handlebars");
 
 //?==================================================//
-//*                    database                      //
+//!                    database                      //
 //?==================================================//
 
 const results = [];
@@ -33,6 +32,18 @@ const results = [];
 const db = mongojs(databaseUrl, collections);
 db.on("error", function(error) {
   console.log("Database Error:", error);
+});
+
+app.get("/", function(req, res) {
+  db.newsPosts.find({}, function(error, found) {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("index", {
+        list: found
+      });
+    }
+  });
 });
 
 app.get("/all", function(req, res) {
@@ -60,9 +71,8 @@ app.get("/scrape", function(req, res) {
   res.send("Scrape Complete");
 });
 
-//!==================================================//
 //?==================================================//
-//*                    Handlebars                    //
+//!                    scrapping                     //
 //?==================================================//
 
 axios
@@ -100,15 +110,12 @@ axios
     console.log(results);
   });
 
-app.get("/", function(req, res) {
-  res.render("index", {
-    list: results
-  });
-});
+//?==================================================//
+//!                    Handlebars                    //
+//?==================================================//
 
-// require("./routes/hbs-routes.js")(app);
+// require("./routes/api-routes")(app);
 // require("./routes/hbs-routes")(app);
-
 app.listen(3000, function() {
   console.log("App running on port 3000!");
 });
