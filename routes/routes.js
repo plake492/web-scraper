@@ -2,6 +2,8 @@ const mongojs = require("mongojs");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
+// const NewPost = require("../models/Technews")
+
 const databaseUrl = "web-scraper-news";
 const collections = ["newsPosts", "postComments"];
 
