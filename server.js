@@ -3,13 +3,11 @@ const exphbs = require("express-handlebars");
 const mongojs = require("mongojs");
 const axios = require("axios");
 const cheerio = require("cheerio");
-
-// Initialize Express
 const app = express();
 
 // Database configuration
 const databaseUrl = "web-scraper-news";
-const collections = ["newsPosts"];
+const collections = ["newsPosts", "postComments"];
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -24,98 +22,136 @@ app.engine(
 app.set("view engine", "handlebars");
 
 //?==================================================//
-//!                    database                      //
+//!                 Database                         //
 //?==================================================//
-
-const results = [];
-
-const db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-  console.log("Database Error:", error);
-});
-
-app.get("/", function(req, res) {
-  db.newsPosts.find({}, function(error, found) {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("index", {
-        list: found
-      });
-    }
-  });
-});
-
-app.get("/all", function(req, res) {
-  db.newsPosts.find({}, function(error, found) {
-    if (error) {
-      console.log(error);
-    } else {
-      res.json(found);
-    }
-  });
-});
-
-app.get("/scrape", function(req, res) {
-  results;
-  console.log("This is the result" + results);
-  // if (title && link && image && description) {
-  // Insert the data in the scrapedData db
-  db.newsPosts.insert(results, function(err, inserted) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(inserted);
-    }
-  });
-  res.send("Scrape Complete");
-});
+// const db = mongojs(databaseUrl, collections);
+// db.on("error", function(error) {
+//   console.log("Database Error:", error);
+// });
 
 //?==================================================//
-//!                    scrapping                     //
+//!               News Posts Routes                  //
 //?==================================================//
+// app.get("/all", function(req, res) {
+//   db.newsPosts.find({}, function(error, found) {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.json(found);
+//     }
+//   });
+// });
 
-axios
-  .get("https://www.nytimes.com/section/technology")
-  .then(function(responce) {
-    const $ = cheerio.load(responce.data);
+// const results = [];
 
-    $("div.css-1l4spti").each(function(i, element) {
-      const title = $(element)
-        .children()
-        .children("h2")
-        .text();
-      const image = $(element)
-        .children()
-        .children()
-        .children("figure")
-        .children()
-        .children("img")
-        .attr("src");
-      const description = $(element)
-        .children()
-        .children()
-        .text();
-      const link = $(element)
-        .children()
-        .attr("href");
+// app.get("/scrape", function(req, res) {
+//   console.log("Scrapping");
+//   axios
+//     .get("https://www.nytimes.com/section/technology")
+//     .then(function(responce) {
+//       const $ = cheerio.load(responce.data);
 
-      results.push({
-        title,
-        image,
-        description,
-        link: `https://www.nytimes.com/${link}`
-      });
-    });
-    console.log(results);
-  });
+//       $("div.css-1l4spti").each(function(i, element) {
+//         const title = $(element)
+//           .children()
+//           .children("h2")
+//           .text();
+//         const image = $(element)
+//           .children()
+//           .children()
+//           .children("figure")
+//           .children()
+//           .children("img")
+//           .attr("src");
+//         const description = $(element)
+//           .children()
+//           .children()
+//           .text();
+//         const link = $(element)
+//           .children()
+//           .attr("href");
+//         resultsPush(title, image, description, link);
+//       });
+//       // const uniqueResluts = new Set(results);
+//       // const newResults = [...uniqueResluts];
+//       console.log(results);
+//       db.newsPosts.insert(results, function(err, inserted) {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           console.log(inserted);
+//         }
+//       });
+//       res.send("Scrape Complete");
+//     });
+//   console.log("This is the result" + results);
+// });
 
+// app.get("/delete/:id", function(req, res) {
+//   db.newsPosts.remove(
+//     {
+//       _id: mongojs.ObjectID(req.params.id)
+//     },
+//     function(error, removed) {
+//       if (error) {
+//         console.log(error);
+//         res.send(error);
+//       } else {
+//         console.log(removed);
+//         res.send(removed);
+//       }
+//     }
+//   );
+// });
+//?==================================================//
+//!                 Comments Routes                  //
+//?==================================================//
+// app.post("/post_comment", function(req, res) {
+//   console.log("THIS IS THE BODY" + req.body);
+//   db.postComments.insert(req.body, function(error, saved) {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.send(saved);
+//     }
+//   });
+// });
+
+//?==================================================//
+//!                    Scrapping                     //
+//?==================================================//
+// function resultsPush(title, image, description, link) {
+//   results.push({
+//     title,
+//     image,
+//     description,
+//     link: `https://www.nytimes.com/${link}`
+//   });
+// }
 //?==================================================//
 //!                    Handlebars                    //
 //?==================================================//
+// app.get("/", function(req, res) {
+//   db.newsPosts.find({}, function(error, found) {
+//     if (error) {
+//       console.log(error);
+//     }
+//     db.postComments.find({}, function(error, data) {
+//       if (error) {
+//         console.log(error);
+//       } else {
+//         res.render("index", {
+//           comments: data,
+//           list: found
+//         });
+//       }
+//     });
+//   });
+// });
 
-// require("./routes/api-routes")(app);
+require("./routes/api-routes")(app);
 // require("./routes/hbs-routes")(app);
+
 app.listen(3000, function() {
   console.log("App running on port 3000!");
 });
