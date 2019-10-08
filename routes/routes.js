@@ -132,15 +132,15 @@ const mongojs = require("mongojs");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-// const NewPost = require("../models/Technews")
+const db = require("../models/Technews")
 
-const databaseUrl = "web-scraper-news";
-const collections = ["newsPosts", "postComments"];
+// const databaseUrl = "web-scraper-news";
+// const collections = ["newsPosts", "postComments"];
 
-const db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-  console.log("Database Error:", error);
-});
+// const db = mongojs(databaseUrl, collections);
+// db.on("error", function(error) {
+//   console.log("Database Error:", error);
+// });
 
 module.exports = function(app) {
   app.get("/all", function(req, res) {
@@ -186,13 +186,9 @@ module.exports = function(app) {
             .attr("href");
 
           console.log(results);
-          db.newsPosts.insert(results, function(err, inserted) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(inserted);
-            }
-          });
+
+          NewsPost.create(result)
+          .then(function)
         });
 
         res.send("Scrape Complete");
@@ -200,7 +196,7 @@ module.exports = function(app) {
     console.log("This is the result" + results);
   });
 
-  
+
   app.get("/delete/:id", function(req, res) {
     db.newsPosts.remove(
       {
@@ -243,6 +239,7 @@ module.exports = function(app) {
       if (error) {
         console.log(error);
       }
+      
       db.postComments.find({}, function(error, data) {
         if (error) {
           console.log(error);
