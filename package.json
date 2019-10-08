@@ -9,6 +9,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "mangojs": "0.0.2",
+    "mongojs": "^2.6.0",
     "mongoose": "^5.7.3"
   },
   "devDependencies": {},
