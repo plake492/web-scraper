@@ -1,10 +1,75 @@
-{{#each list}}
-<hr>
-<p>ARTICLE</p>
-<a href="{{link}}">
-    <p>{{title}}</p>
-    <img src="{{image}}" alt="">
-    <p>{{description}}</p>
-</a>
-<br>
-{{/each}}
+<div class="row">
+    <div class="col-lg-2" style="background-color:rgb(236, 114, 114); padding: 20px 0 0 20px">
+        <div class="container">
+            <h2>Comments</h2>
+            <hr>
+            {{#each comments}}
+            <p>{{comment}}</p>
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="col-lg-10" style="background-color:rgb(194, 194, 194);  padding: 20px 0 0 20px">
+        <div class="container">
+            <h2>NY TIMES: TECH NEWS</h2>
+        </div>
+        {{#each list}}
+        <div class="container">
+            <hr>
+            <p>{{title}}</p>
+            <img src="{{image}}" alt="">
+            <p>{{description}}</p>
+            <a href="{{link}}" target="blank"> <button type="button" class="btn btn-primary">View Article</button></a>
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Leave a Comment</button>
+
+            <button type="button" class="btn btn-primary delete" data-id="{{_id}}">
+                Delete Article</button> <a href="/"></a>
+
+            <div class=" modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New Comment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Comment:</label>
+                                    <textarea class="form-control" id="message-text"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                data-id="{{_id}}">Close</button>
+                            <button type="button" class="btn btn-primary" id="comment">Add Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--TEST COMMENT SECTION -->
+            {{!-- <div>
+                <h4>Comments</h4>
+                <p id="{{id}}"></p>
+            </div> --}}
+            <!--TEST COMMENT SECTION -->
+
+            <br>
+        </div>
+
+        {{/each}}
+
+        <div class="container">
+            <hr>
+            <br>
+            <button style="margin: 0 0 20px 0" type="button" class="btn btn-primary" id="scrape">Get Articles</button>
+        </div>
+    </div>
+</div>
