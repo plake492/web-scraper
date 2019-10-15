@@ -5,7 +5,7 @@ const cheerio = require("cheerio");
 const databaseUrl = "web-scraper-news";
 const collections = ["newsPosts", "postComments"];
 
-const db = process.env.MONGODB_URI || mongojs(databaseUrl, collections);
+const db = mongojs(databaseUrl, collections);
 db.on("error", function(error) {
   console.log("Database Error:", error);
 });
