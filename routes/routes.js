@@ -2,10 +2,13 @@ const mongojs = require("mongojs");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const databaseUrl = "web-scraper-news";
+// const databaseUrl = "web-scraper-news";
 const collections = ["newsPosts", "postComments"];
 
-const db = mongojs(databaseUrl, collections);
+const db = mongojs(
+  `mongodb://plake492:coding492@ds127994.mlab.com:27994/heroku_hvrgjzcx`,
+  collections
+);
 db.on("error", function(error) {
   console.log("Database Error:", error);
 });
