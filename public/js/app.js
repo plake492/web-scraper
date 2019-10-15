@@ -1,6 +1,5 @@
 $(".delete").on("click", function() {
   const selected = $(this).attr("data-id");
-
   $.ajax({
     type: "GET",
     url: "/delete/" + selected

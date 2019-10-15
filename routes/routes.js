@@ -46,7 +46,9 @@ module.exports = function(app) {
           const description = $(element)
             .children()
             .children()
-            .text();
+            .text()
+            .split("Image")
+            .join(" ");
           const link = $(element)
             .children()
             .attr("href");
@@ -127,24 +129,20 @@ module.exports = function(app) {
 // const axios = require("axios");
 // const cheerio = require("cheerio");
 // const db = require("../models/Technews");
-
-// // const databaseUrl = "web-scraper-news";
-// // const collections = ["newsPosts", "postComments"];
-
-// // const db = mongojs(databaseUrl, collections);
-// // db.on("error", function(error) {
-// //   console.log("Database Error:", error);
-// // });
+// var mongoose = require("mongoose");
 
 // module.exports = function(app) {
-//   app.get("/all", function(req, res) {
-//     db.NewPost.find({}, function(error, found) {
-//       if (error) {
-//         console.log(error);
-//       } else {
-//         res.json(found);
-//       }
-//     });
+//   // app.get("/all", function(req, res) {
+//   //   db.NewPost.find({}, function(error, found) {
+//   //     if (error) {
+//   //       console.log(error);
+//   //     } else {
+//   //       res.json(found);
+//   //     }
+//   //   });
+//   // });
+//   mongoose.connect("mongodb://localhost/unit18Populater", {
+//     useNewUrlParser: true
 //   });
 
 //   app.get("/scrape", function(req, res) {
@@ -179,15 +177,18 @@ module.exports = function(app) {
 
 //           console.log(result);
 
-//           db.NewsPost.create(result).then(function(webScraperNews) {
-//             res.json(webScraperNews);
-//             console.log(webScraperNews);
-//           });
-//         });
+//           db.NewPost.create(result)
+//             .then(function(webScraperNews) {
+//               console.log(webScraperNews);
+//             })
+//             .catch(function(err) {
+//               // If an error occurred, log it
+//               console.log(err);
+//             });
 
-//         res.send("Scrape Complete");
+//           res.send("Scrape Complete");
+//         });
 //       });
-//     console.log("This is the result" + results);
 //   });
 
 //   // app.get("/delete/:id", function(req, res) {
@@ -228,7 +229,7 @@ module.exports = function(app) {
 //   // }
 
 //   app.get("/", function(req, res) {
-//     db.NewsPost.find({})
+//     db.NewPost.find({})
 //       .then(function(dbNewsPost) {
 //         res.json(dbNewsPost);
 //       })
